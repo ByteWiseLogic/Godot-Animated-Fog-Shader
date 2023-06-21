@@ -1,0 +1,154 @@
+[gd_scene load_steps=19 format=3 uid="uid://cyw7yyagcribm"]
+
+[ext_resource type="Shader" path="res://animated_fog.gdshader" id="1_x5a7m"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_p63tm"]
+
+[sub_resource type="Sky" id="Sky_y1ihp"]
+sky_material = SubResource("ProceduralSkyMaterial_p63tm")
+
+[sub_resource type="Environment" id="Environment_uhr54"]
+background_mode = 2
+sky = SubResource("Sky_y1ihp")
+glow_enabled = true
+glow_levels/5 = 14.0
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.0
+volumetric_fog_temporal_reprojection_enabled = false
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_8te5j"]
+size = Vector2(15, 15)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_dldym"]
+noise_type = 0
+fractal_type = 2
+
+[sub_resource type="NoiseTexture3D" id="NoiseTexture3D_44b5o"]
+width = 128
+height = 128
+depth = 128
+noise = SubResource("FastNoiseLite_dldym")
+
+[sub_resource type="Gradient" id="Gradient_a14bl"]
+offsets = PackedFloat32Array(0, 0.3, 0.5, 0.7, 1)
+colors = PackedColorArray(0.823529, 0.705882, 0.54902, 1, 0.760784, 0.631373, 0.152941, 1, 0.662745, 0.572549, 0.364706, 1, 0.537255, 0.427451, 0.278431, 1, 0.431373, 0.341176, 0.203922, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_b8t01"]
+gradient = SubResource("Gradient_a14bl")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_p6cc5"]
+shader = ExtResource("1_x5a7m")
+shader_parameter/density = 1.0
+shader_parameter/noise_scale = 0.1
+shader_parameter/edge_fade = null
+shader_parameter/height_falloff = 0.0
+shader_parameter/flatness = 3.59
+shader_parameter/noise_flow = Vector3(0, 0, 1)
+shader_parameter/emission_as_albedo = false
+shader_parameter/gradient_as_albedo = true
+shader_parameter/albedo = Color(1, 1, 1, 1)
+shader_parameter/emission = Color(0, 0, 0, 1)
+shader_parameter/emission_energy = null
+shader_parameter/grad_tex = SubResource("GradientTexture1D_b8t01")
+shader_parameter/density_texture = SubResource("NoiseTexture3D_44b5o")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_5myg7"]
+noise_type = 3
+fractal_type = 2
+
+[sub_resource type="NoiseTexture3D" id="NoiseTexture3D_x0rsa"]
+width = 128
+height = 128
+depth = 128
+noise = SubResource("FastNoiseLite_5myg7")
+
+[sub_resource type="Gradient" id="Gradient_2ksdw"]
+offsets = PackedFloat32Array(0, 0.2, 0.4, 0.6, 0.8, 1)
+colors = PackedColorArray(0.678431, 0.847059, 0.901961, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0.8, 0, 1, 1, 0.4, 0, 1, 0.545098, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_rcq8y"]
+gradient = SubResource("Gradient_2ksdw")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bh3k1"]
+shader = ExtResource("1_x5a7m")
+shader_parameter/density = 1.546
+shader_parameter/noise_scale = 0.1
+shader_parameter/edge_fade = 0.053
+shader_parameter/height_falloff = 1.64
+shader_parameter/flatness = 6.95
+shader_parameter/noise_flow = Vector3(0, -0.41, 0)
+shader_parameter/emission_as_albedo = true
+shader_parameter/gradient_as_albedo = true
+shader_parameter/albedo = Color(1, 1, 1, 1)
+shader_parameter/emission = Color(0, 0, 0, 1)
+shader_parameter/emission_energy = 1.295
+shader_parameter/grad_tex = SubResource("GradientTexture1D_rcq8y")
+shader_parameter/density_texture = SubResource("NoiseTexture3D_x0rsa")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_nu4n7"]
+noise_type = 3
+fractal_type = 2
+
+[sub_resource type="NoiseTexture3D" id="NoiseTexture3D_csvhg"]
+width = 128
+height = 128
+depth = 128
+noise = SubResource("FastNoiseLite_nu4n7")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rnqvg"]
+shader = ExtResource("1_x5a7m")
+shader_parameter/density = 1.0
+shader_parameter/noise_scale = 0.191
+shader_parameter/edge_fade = 0.0
+shader_parameter/height_falloff = 0.89
+shader_parameter/flatness = 6.515
+shader_parameter/noise_flow = Vector3(0, -1, 0)
+shader_parameter/emission_as_albedo = null
+shader_parameter/gradient_as_albedo = null
+shader_parameter/albedo = Color(1, 1, 1, 1)
+shader_parameter/emission = Color(0, 0, 0, 1)
+shader_parameter/emission_energy = null
+shader_parameter/density_texture = SubResource("NoiseTexture3D_csvhg")
+
+[node name="Demo" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_uhr54")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.563829, 0.825892, 0, -0.825892, 0.563829, 0, 0, 0)
+
+[node name="Node3D" type="Node3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D"]
+mesh = SubResource("PlaneMesh_8te5j")
+skeleton = NodePath("../..")
+
+[node name="FogVolume" type="FogVolume" parent="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.39, 0)
+size = Vector3(15, 7.3, 15)
+material = SubResource("ShaderMaterial_p6cc5")
+
+[node name="Node3D2" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D2"]
+mesh = SubResource("PlaneMesh_8te5j")
+skeleton = NodePath("../..")
+
+[node name="FogVolume" type="FogVolume" parent="Node3D2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.39, 0)
+size = Vector3(15, 7.3, 15)
+material = SubResource("ShaderMaterial_bh3k1")
+
+[node name="Node3D3" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D3"]
+mesh = SubResource("PlaneMesh_8te5j")
+skeleton = NodePath("../..")
+
+[node name="FogVolume" type="FogVolume" parent="Node3D3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.39, 0)
+size = Vector3(15, 7.3, 15)
+material = SubResource("ShaderMaterial_rnqvg")
