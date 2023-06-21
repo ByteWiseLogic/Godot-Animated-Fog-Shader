@@ -17,3 +17,6 @@ The shader has the following parameters:
 - `emission_energy`: The glow strength of the fog.
 - `gradient_texture`: Color ramp for the fog, only used when `gradient_as_albedo` is `true`.
 - `density_texture`: The noise texture for the fog. Very important.
+
+
+A `quick`, unfortunately soundless showcase: https://www.youtube-nocookie.com/embed/MReEkuNXbk0
